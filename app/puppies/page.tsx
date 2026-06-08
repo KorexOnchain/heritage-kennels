@@ -54,22 +54,13 @@ const breedImages: Record<string, string> = {
   'German Shepherd': '/german-shepherd.jpg',
 }
 
-const LIFESTYLE_COLLECTIONS = [
-  { label: 'Doodle breeds', href: '/collections/doodle-puppies' },
-  { label: 'Best apartment breeds', href: '/collections/best-apartment-dogs' },
-  { label: 'Teacup breeds', href: '/collections/teacup-puppies' },
-  { label: 'Best family breeds', href: '/collections/best-family-dogs' },
-  { label: 'Allergy-friendly breeds', href: '/collections/allergy-friendly-dogs' },
-  { label: 'Top active breeds', href: '/collections/active-dogs' },
-]
-
 const PHOTO_REVIEWS = [
   {
     name: 'Sarah M.',
     location: 'Austin, TX',
     review: 'Our Labrador Max is the most loving dog. Heritage Kennels made the whole process so easy and stress free!',
     stars: 5,
-    image: '/reviews/sarah-max.jpg', // real puppy photo here
+    image: '/reviews/sarah-max.jpg',
     date: 'March 2026',
   },
   {
@@ -89,6 +80,7 @@ const PHOTO_REVIEWS = [
     date: 'February 2026',
   },
 ]
+
 type SortOption = 'newest' | 'price_asc' | 'price_desc' | 'age_asc' | 'ready_soon'
 
 export default function PuppiesPage() {
@@ -100,6 +92,8 @@ export default function PuppiesPage() {
   const [expanded, setExpanded] = useState(false)
   const [sortBy, setSortBy] = useState<SortOption>('newest')
   const [showSort, setShowSort] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [showFilters, setShowFilters] = useState(false)
 
   useEffect(() => {
     fetchPuppies()
@@ -129,7 +123,7 @@ export default function PuppiesPage() {
       if (sortBy === 'age_asc') return a.age_weeks - b.age_weeks
       if (sortBy === 'ready_soon')
         return new Date(a.ready_date).getTime() - new Date(b.ready_date).getTime()
-      return 0 // newest = default supabase order
+      return 0
     })
 
   const activeBreed = selectedBreed !== 'All' ? breedInfo[selectedBreed as keyof typeof breedInfo] : null
@@ -145,25 +139,16 @@ export default function PuppiesPage() {
   return (
     <main className="min-h-screen bg-[#fdf6ee]">
 
-      {/* ── Top utility bar ── */}
-      <div className="bg-[#3a2410] text-white text-sm px-6 py-2 flex items-center justify-between">
-        <a href="tel:+15551234567" className="hover:text-[#e8d5b7] transition-colors flex items-center gap-2">
-          📞 Call our puppy concierges: <strong>(555) 123-4567</strong> · 8am – midnight
-        </a>
-        <Link href="/delivery" className="hover:text-[#e8d5b7] transition-colors">
-          🚚 We deliver nationwide →
-        </Link>
-      </div>
-
       {/* ── Navbar ── */}
-      <nav className="flex items-center justify-between px-8 py-4 bg-[#fdf6ee] shadow-sm sticky top-0 z-40">
+      <nav className="flex items-center justify-between px-5 md:px-8 py-4 bg-[#fdf6ee] shadow-sm sticky top-0 z-40">
         <Link href="/">
           <div>
-            <p className="text-2xl font-black text-[#5c3d1e]">Heritage Kennels</p>
+            <p className="text-xl md:text-2xl font-black text-[#5c3d1e]">Heritage Kennels</p>
             <p className="text-xs text-[#a07850]">The Farmer's Dog</p>
           </div>
         </Link>
-        <div className="flex items-center gap-8">
+        {/* Desktop links */}
+        <div className="hidden md:flex items-center gap-8">
           <Link href="/puppies" className="text-[#5c3d1e] hover:text-[#a07850] font-semibold">Available Puppies</Link>
           <Link href="/about" className="text-[#5c3d1e] hover:text-[#a07850] font-semibold">About Us</Link>
           <Link href="/contact" className="text-[#5c3d1e] hover:text-[#a07850] font-semibold">Contact</Link>
@@ -171,13 +156,28 @@ export default function PuppiesPage() {
             Find Your Puppy
           </Link>
         </div>
+        {/* Mobile hamburger */}
+        <button className="md:hidden text-[#5c3d1e] text-2xl font-black" onClick={() => setMenuOpen(!menuOpen)}>
+          {menuOpen ? '✕' : '☰'}
+        </button>
       </nav>
 
+      {/* Mobile menu */}
+      {menuOpen && (
+        <div className="md:hidden bg-white border-b-2 border-[#e8d5b7] px-5 py-4 flex flex-col gap-4 z-30">
+          <Link href="/puppies" onClick={() => setMenuOpen(false)} className="text-[#5c3d1e] font-semibold">Available Puppies</Link>
+          <Link href="/about" onClick={() => setMenuOpen(false)} className="text-[#5c3d1e] font-semibold">About Us</Link>
+          <Link href="/contact" onClick={() => setMenuOpen(false)} className="text-[#5c3d1e] font-semibold">Contact</Link>
+          <Link href="/puppies" onClick={() => setMenuOpen(false)} className="bg-[#5c3d1e] text-white px-5 py-2 rounded-full font-bold text-center">
+            Find Your Puppy
+          </Link>
+        </div>
+      )}
+
       {/* ── Breed Header ── */}
-      <section className="bg-[#5c3d1e] text-white px-8 py-12">
+      <section className="bg-[#5c3d1e] text-white px-5 md:px-8 py-8 md:py-12">
         <div className="max-w-6xl mx-auto">
-          {/* Breadcrumbs */}
-          <nav className="text-sm text-[#e8d5b7] mb-4 flex items-center gap-1">
+          <nav className="text-sm text-[#e8d5b7] mb-4 flex items-center gap-1 flex-wrap">
             <Link href="/" className="hover:text-white">Heritage Kennels</Link>
             <span>/</span>
             <Link href="/puppies" className="hover:text-white">Available Puppies</Link>
@@ -188,16 +188,15 @@ export default function PuppiesPage() {
               </>
             )}
           </nav>
-
-          <h1 className="text-5xl font-black mb-2">
+          <h1 className="text-3xl md:text-5xl font-black mb-2">
             {selectedBreed === 'All' ? 'Available Puppies' : `${selectedBreed} Puppies`}
           </h1>
           {activeBreed && (
-            <p className="text-[#e8d5b7] text-lg font-semibold mb-4">{activeBreed.traits}</p>
+            <p className="text-[#e8d5b7] text-base md:text-lg font-semibold mb-4">{activeBreed.traits}</p>
           )}
           {activeBreed && (
             <div className="max-w-2xl">
-              <p className="text-white/80 leading-relaxed">
+              <p className="text-white/80 leading-relaxed text-sm md:text-base">
                 {expanded ? activeBreed.description : `${activeBreed.description.slice(0, 120)}...`}
                 <button onClick={() => setExpanded(!expanded)} className="ml-2 text-[#e8d5b7] font-black underline">
                   {expanded ? 'Read less' : 'Read more'}
@@ -206,19 +205,19 @@ export default function PuppiesPage() {
             </div>
           )}
           {selectedBreed === 'All' && (
-            <p className="text-[#e8d5b7]">Find your perfect companion from our farm in Dallas, Texas</p>
+            <p className="text-[#e8d5b7] text-sm md:text-base">Find your perfect companion from our farm in Dallas, Texas</p>
           )}
         </div>
       </section>
 
       {/* ── Breed Filter Tabs ── */}
-      <section className="bg-white border-b-2 border-[#e8d5b7] px-8 py-4">
-        <div className="max-w-6xl mx-auto flex gap-3 flex-wrap">
+      <section className="bg-white border-b-2 border-[#e8d5b7] px-5 md:px-8 py-4">
+        <div className="max-w-6xl mx-auto flex gap-2 md:gap-3 flex-wrap">
           {['All', 'Labrador Retriever', 'Poodle', 'German Shepherd'].map((breed) => (
             <button
               key={breed}
               onClick={() => { setSelectedBreed(breed); setExpanded(false) }}
-              className={`px-5 py-2 rounded-full font-black text-sm border-2 transition-colors ${
+              className={`px-3 md:px-5 py-2 rounded-full font-black text-xs md:text-sm border-2 transition-colors ${
                 selectedBreed === breed
                   ? 'bg-[#5c3d1e] text-white border-[#5c3d1e]'
                   : 'border-[#e8d5b7] text-[#5c3d1e] hover:border-[#a07850]'
@@ -230,43 +229,55 @@ export default function PuppiesPage() {
         </div>
       </section>
 
-      <div className="max-w-6xl mx-auto px-8 py-8 flex gap-8">
+      <div className="max-w-6xl mx-auto px-5 md:px-8 py-6 md:py-8 flex gap-8">
         {/* ── Main Content ── */}
         <div className="flex-1 min-w-0">
 
-          {/* ── Sticky Filter + Sort Bar ── */}
-          <div className="sticky top-[65px] z-30 bg-[#fdf6ee] pb-4 pt-1">
-            <div className="flex items-center gap-3 flex-wrap">
-              <span className="text-[#5c3d1e] font-black text-sm">Filter:</span>
+          {/* ── Filter + Sort Bar ── */}
+          <div className="sticky top-[65px] z-30 bg-[#fdf6ee] pb-3 pt-1">
+            {/* Mobile: toggle button */}
+            <div className="flex items-center gap-3 md:hidden mb-2">
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className="px-4 py-2 rounded-full text-sm font-bold border-2 border-[#e8d5b7] text-[#5c3d1e]"
+              >
+                {showFilters ? 'Hide Filters ▴' : 'Filters & Sort ▾'}
+              </button>
+              <span className="text-[#a07850] font-bold text-sm ml-auto">{filtered.length} puppies</span>
+            </div>
+
+            {/* Filters — always visible on desktop, toggle on mobile */}
+            <div className={`${showFilters ? 'flex' : 'hidden'} md:flex items-center gap-2 md:gap-3 flex-wrap`}>
+              <span className="text-[#5c3d1e] font-black text-sm hidden md:inline">Filter:</span>
               {['All', 'Female', 'Male'].map((gender) => (
                 <button
                   key={gender}
                   onClick={() => setSelectedGender(gender)}
-                  className={`px-4 py-2 rounded-full text-sm font-bold border-2 transition-colors ${
+                  className={`px-3 md:px-4 py-2 rounded-full text-sm font-bold border-2 transition-colors ${
                     selectedGender === gender
                       ? 'bg-[#5c3d1e] text-white border-[#5c3d1e]'
                       : 'border-[#e8d5b7] text-[#5c3d1e] hover:border-[#a07850]'
                   }`}
                 >
-                  {gender === 'All' ? 'All' : gender}
+                  {gender}
                 </button>
               ))}
               <button
                 onClick={() => setReadyNow(!readyNow)}
-                className={`px-4 py-2 rounded-full text-sm font-bold border-2 transition-colors ${
+                className={`px-3 md:px-4 py-2 rounded-full text-sm font-bold border-2 transition-colors ${
                   readyNow
                     ? 'bg-[#5c3d1e] text-white border-[#5c3d1e]'
                     : 'border-[#e8d5b7] text-[#5c3d1e] hover:border-[#a07850]'
                 }`}
               >
-                Ready to go home
+                Ready now
               </button>
 
               {/* Sort dropdown */}
-              <div className="ml-auto relative">
+              <div className="md:ml-auto relative">
                 <button
                   onClick={() => setShowSort(!showSort)}
-                  className="px-4 py-2 rounded-full text-sm font-bold border-2 border-[#e8d5b7] text-[#5c3d1e] hover:border-[#a07850] flex items-center gap-2 transition-colors"
+                  className="px-3 md:px-4 py-2 rounded-full text-sm font-bold border-2 border-[#e8d5b7] text-[#5c3d1e] flex items-center gap-2"
                 >
                   Sort: {sortLabels[sortBy]}
                   <span className="text-xs">▾</span>
@@ -287,8 +298,7 @@ export default function PuppiesPage() {
                   </div>
                 )}
               </div>
-
-              <span className="text-[#a07850] font-bold text-sm">{filtered.length} puppies available</span>
+              <span className="text-[#a07850] font-bold text-sm hidden md:inline">{filtered.length} puppies available</span>
             </div>
           </div>
 
@@ -307,11 +317,10 @@ export default function PuppiesPage() {
               </Link>
             </div>
           ) : (
-            <div className="grid grid-cols-3 gap-5">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5">
               {filtered.map((puppy) => (
                 <Link href={`/puppies/${puppy.id}`} key={puppy.id}
                   className="bg-white rounded-2xl overflow-hidden border-2 border-[#e8d5b7] hover:shadow-xl hover:border-[#a07850] transition-all group">
-                  {/* Portrait-style image — taller aspect ratio like PuppySpot */}
                   <div className="aspect-[3/4] bg-[#e8d5b7] overflow-hidden relative">
                     {puppy.images?.[0] ? (
                       <Image
@@ -324,21 +333,20 @@ export default function PuppiesPage() {
                       <div className="w-full h-full flex items-center justify-center text-6xl">🐾</div>
                     )}
                     {puppy.is_champion_bloodline && (
-                      <span className="absolute bottom-3 left-3 bg-yellow-400 text-yellow-900 text-xs font-black px-3 py-1 rounded-full">
-                        ⭐ Champion bloodline
+                      <span className="absolute bottom-3 left-3 bg-yellow-400 text-yellow-900 text-xs font-black px-2 py-1 rounded-full">
+                        ⭐ Champion
                       </span>
                     )}
                   </div>
-                  <div className="p-4">
-                    <h3 className="text-lg font-black text-[#5c3d1e]">{puppy.name}</h3>
-                    <p className="text-[#a07850] text-sm">{puppy.breed}</p>
-                    <p className="text-gray-500 text-sm">{puppy.gender} · {puppy.age_weeks} weeks</p>
+                  <div className="p-3 md:p-4">
+                    <h3 className="text-base md:text-lg font-black text-[#5c3d1e]">{puppy.name}</h3>
+                    <p className="text-[#a07850] text-xs md:text-sm">{puppy.breed}</p>
+                    <p className="text-gray-500 text-xs md:text-sm">{puppy.gender} · {puppy.age_weeks}wks</p>
                     <p className="text-gray-400 text-xs mt-1">
                       {new Date(puppy.ready_date) <= new Date()
-                        ? '✅ Ready to go home'
-                        : `Ready by ${new Date(puppy.ready_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`}
+                        ? '✅ Ready now'
+                        : `Ready ${new Date(puppy.ready_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`}
                     </p>
-                    {/* Price intentionally hidden on card — shown on detail page (PuppySpot pattern) */}
                   </div>
                 </Link>
               ))}
@@ -346,9 +354,9 @@ export default function PuppiesPage() {
           )}
         </div>
 
-        {/* ── Right Sidebar — About Breed ── */}
+        {/* ── Right Sidebar — hidden on mobile ── */}
         {activeBreed && (
-          <aside className="w-64 shrink-0">
+          <aside className="hidden md:block w-64 shrink-0">
             <div className="bg-white rounded-3xl border-2 border-[#e8d5b7] overflow-hidden sticky top-[80px]">
               <div className="relative h-48">
                 <Image
@@ -374,8 +382,6 @@ export default function PuppiesPage() {
                     <p className="text-xs text-[#a07850] font-bold uppercase">Breed Group</p>
                     <p className="text-sm font-bold text-[#5c3d1e]">{activeBreed.group}</p>
                   </div>
-
-                  {/* "Also part of" collections */}
                   {activeBreed.collections.length > 0 && (
                     <div>
                       <p className="text-xs text-[#a07850] font-bold uppercase mb-2">Also part of</p>
@@ -393,8 +399,6 @@ export default function PuppiesPage() {
                     </div>
                   )}
                 </div>
-
-                {/* Learn more CTA */}
                 <Link
                   href={activeBreed.learnMoreHref}
                   className="mt-5 block text-center border-2 border-[#5c3d1e] text-[#5c3d1e] font-black text-sm px-4 py-2 rounded-full hover:bg-[#5c3d1e] hover:text-white transition-colors"
@@ -408,66 +412,57 @@ export default function PuppiesPage() {
       </div>
 
       {/* ── Photo Reviews Section ── */}
-<section className="bg-white px-8 py-16">
-  <div className="max-w-6xl mx-auto">
-    <div className="flex items-center justify-between mb-10">
-      <h2 className="text-3xl font-black text-[#5c3d1e]">Happy Puppy Parents</h2>
-      {/* Trust badge — static, no link */}
-      <div className="flex items-center gap-3 bg-[#fdf6ee] border-2 border-[#e8d5b7] rounded-full px-5 py-2">
-        <div className="flex items-center gap-0.5">
-          {[...Array(4)].map((_, i) => (
-            <span key={i} className="text-[#00b67a] text-lg">★</span>
-          ))}
-          <span className="text-[#00b67a] text-lg">☆</span>
-        </div>
-        <div>
-          <p className="text-xs font-black text-[#5c3d1e]">4.8 out of 5</p>
-          <p className="text-xs text-[#a07850]">Trustpilot</p>
-        </div>
-      </div>
-    </div>
-    <div className="grid grid-cols-3 gap-6">
-      {PHOTO_REVIEWS.map((review) => (
-        <div key={review.name} className="bg-[#fdf6ee] rounded-3xl overflow-hidden border-2 border-[#e8d5b7]">
-          {/* Puppy photo */}
-          <div className="aspect-[4/3] bg-[#e8d5b7] relative overflow-hidden">
-            {review.image ? (
-              <Image
-                src={review.image}
-                alt={`${review.name}'s puppy`}
-                fill
-                className="object-cover"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#e8d5b7] to-[#c8a87a]">
-                <span className="text-6xl">🐶</span>
+      <section className="bg-white px-5 md:px-8 py-12 md:py-16">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 md:mb-10">
+            <h2 className="text-2xl md:text-3xl font-black text-[#5c3d1e]">Happy Puppy Parents</h2>
+            <div className="flex items-center gap-3 bg-[#fdf6ee] border-2 border-[#e8d5b7] rounded-full px-4 py-2 self-start sm:self-auto">
+              <div className="flex items-center gap-0.5">
+                {[...Array(4)].map((_, i) => (
+                  <span key={i} className="text-[#00b67a] text-base md:text-lg">★</span>
+                ))}
+                <span className="text-[#00b67a] text-base md:text-lg">☆</span>
               </div>
-            )}
-          </div>
-          <div className="p-6">
-            <div className="flex items-center gap-1 mb-3">
-              {[...Array(review.stars)].map((_, i) => (
-                <span key={i} className="text-yellow-400 text-base">★</span>
-              ))}
+              <div>
+                <p className="text-xs font-black text-[#5c3d1e]">4.8 out of 5</p>
+                <p className="text-xs text-[#a07850]">Trustpilot</p>
+              </div>
             </div>
-            <p className="text-[#5c3d1e] mb-4 italic text-sm">"{review.review}"</p>
-            <p className="font-black text-[#5c3d1e] text-sm">{review.name}</p>
-            <p className="text-[#a07850] text-xs">{review.location} · {review.date}</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
+            {PHOTO_REVIEWS.map((review) => (
+              <div key={review.name} className="bg-[#fdf6ee] rounded-3xl overflow-hidden border-2 border-[#e8d5b7]">
+                <div className="aspect-[4/3] bg-[#e8d5b7] relative overflow-hidden">
+                  {review.image ? (
+                    <Image src={review.image} alt={`${review.name}'s puppy`} fill className="object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#e8d5b7] to-[#c8a87a]">
+                      <span className="text-6xl">🐶</span>
+                    </div>
+                  )}
+                </div>
+                <div className="p-5 md:p-6">
+                  <div className="flex items-center gap-1 mb-3">
+                    {[...Array(review.stars)].map((_, i) => (
+                      <span key={i} className="text-yellow-400 text-base">★</span>
+                    ))}
+                  </div>
+                  <p className="text-[#5c3d1e] mb-4 italic text-sm">"{review.review}"</p>
+                  <p className="font-black text-[#5c3d1e] text-sm">{review.name}</p>
+                  <p className="text-[#a07850] text-xs">{review.location} · {review.date}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-      ))}
-    </div>
-  </div>
-</section>
+      </section>
 
       {/* ── Footer ── */}
-      <footer className="bg-[#3a2410] text-white px-8 pt-12 pb-6">
+      <footer className="bg-[#3a2410] text-white px-5 md:px-8 pt-10 md:pt-12 pb-6">
         <div className="max-w-6xl mx-auto">
-
-          {/* Footer columns */}
-          <div className="grid grid-cols-4 gap-8 mb-10 text-sm">
-            <div>
-              <p className="text-2xl font-black mb-1">Heritage Kennels</p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 mb-10 text-sm">
+            <div className="col-span-2 md:col-span-1">
+              <p className="text-xl md:text-2xl font-black mb-1">Heritage Kennels</p>
               <p className="text-[#a07850] text-xs mb-4">The Farmer's Dog — Dallas, Texas</p>
               <p className="text-[#e8d5b7]/70 text-xs leading-relaxed">
                 Raising healthy, happy puppies on our family farm since 2010.
@@ -491,21 +486,9 @@ export default function PuppiesPage() {
                 <Link href="/reviews" className="hover:text-white transition-colors">Reviews</Link>
               </div>
             </div>
-            <div>
-              {/* Phone / concierge CTA */}
-              <p className="text-xs font-black text-[#a07850] uppercase mb-3">Need Guidance?</p>
-              <a href="tel:+15551234567" className="text-white font-black text-lg hover:text-[#e8d5b7] transition-colors block mb-1">
-                (555) 123-4567
-              </a>
-              <p className="text-[#a07850] text-xs mb-5">Everyday 8AM – Midnight CST</p>
-              <Link href="/contact" className="inline-block bg-[#a07850] hover:bg-[#5c3d1e] text-white text-sm font-bold px-5 py-2 rounded-full transition-colors border border-[#a07850]">
-                Contact Us
-              </Link>
-            </div>
           </div>
-
           <hr className="border-[#5c3d1e] mb-4" />
-          <div className="flex items-center justify-between text-xs text-[#a07850]">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#a07850]">
             <p>© 2026 Heritage Kennels. All rights reserved.</p>
             <div className="flex gap-4">
               <Link href="/terms" className="hover:text-white">Terms of Use</Link>
