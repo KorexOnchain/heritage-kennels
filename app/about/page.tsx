@@ -31,15 +31,6 @@ export default function AboutPage() {
   return (
     <main className="min-h-screen bg-[#fdf6ee]">
 
-      {/* ── Top utility bar ── */}
-      <div className="bg-[#3a2410] text-white text-xs px-4 py-2 flex items-center justify-between">
-        <a href="tel:+15551234567" className="hover:text-[#e8d5b7] transition-colors">
-          📞 <span className="hidden sm:inline">Call us: </span><strong>(555) 123-4567</strong>
-        </a>
-        <Link href="/delivery" className="hover:text-[#e8d5b7] transition-colors">
-          🚚 <span className="hidden sm:inline">We deliver </span>nationwide →
-        </Link>
-      </div>
 
       {/* ── Navbar ── */}
       <nav className="flex items-center justify-between px-4 sm:px-8 py-4 bg-[#fdf6ee] shadow-sm sticky top-0 z-40">
@@ -230,11 +221,7 @@ export default function AboutPage() {
               >
                 📘 Facebook
               </a>
-              <p className="text-xs font-black text-[#a07850] uppercase mt-4 mb-2">Need Help?</p>
-              <a href="tel:+15551234567" className="text-white font-black hover:text-[#e8d5b7] transition-colors block mb-1">
-                (555) 123-4567
-              </a>
-              <p className="text-[#a07850] text-xs">Everyday 8AM – Midnight CST</p>
+              
             </div>
           </div>
           <hr className="border-[#5c3d1e] mb-4" />
