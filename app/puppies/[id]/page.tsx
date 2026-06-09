@@ -182,9 +182,8 @@ export default function PuppyPage() {
                   <button
                     key={index}
                     onClick={() => setActiveImage(index)}
-                    className={`relative w-16 h-16 rounded-xl overflow-hidden border-2 transition-all shrink-0 ${
-                      activeImage === index ? 'border-[#5c3d1e]' : 'border-[#e8d5b7] hover:border-[#a07850]'
-                    }`}
+                    className={`relative w-16 h-16 rounded-xl overflow-hidden border-2 transition-all shrink-0 ${activeImage === index ? 'border-[#5c3d1e]' : 'border-[#e8d5b7] hover:border-[#a07850]'
+                      }`}
                   >
                     <Image src={img} alt={`${puppy.name} ${index + 1}`} fill className="object-cover" />
                   </button>
@@ -220,9 +219,8 @@ export default function PuppyPage() {
                 <button
                   key={index}
                   onClick={() => setActiveImage(index)}
-                  className={`relative w-16 h-16 rounded-xl overflow-hidden border-2 shrink-0 transition-all ${
-                    activeImage === index ? 'border-[#5c3d1e]' : 'border-[#e8d5b7]'
-                  }`}
+                  className={`relative w-16 h-16 rounded-xl overflow-hidden border-2 shrink-0 transition-all ${activeImage === index ? 'border-[#5c3d1e]' : 'border-[#e8d5b7]'
+                    }`}
                 >
                   <Image src={img} alt={`${puppy.name} ${index + 1}`} fill className="object-cover" />
                 </button>
@@ -238,13 +236,11 @@ export default function PuppyPage() {
                 {isReady ? '✅ Ready now' : `🗓 ${readyLabel}`}
               </span>
             </div>
-            <a
-              href="https://www.facebook.com/YOUR_PAGE"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full bg-[#1877F2] text-white py-3 rounded-full font-black text-center block"
-            >
+            <a href="https://www.facebook.com/share/1B8NFWF5Nt/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="w-full bg-[#1877F2] text-white py-4 rounded-full font-black text-center hover:opacity-90 transition-opacity block">
               📘 Message us on Facebook
+            </a>
+            <a href="https://wa.me/17025461964" target="_blank" rel="noopener noreferrer" className="w-full bg-[#25D366] text-white py-4 rounded-full font-black text-center hover:opacity-90 transition-opacity block">
+              💬 WhatsApp Us
             </a>
             <p className="text-center text-[#a07850] text-xs mt-2">
               Mention <span className="font-black text-[#5c3d1e]">{puppy.name}</span> when you reach out!
@@ -446,9 +442,11 @@ export default function PuppyPage() {
             </div>
 
             <div className="flex flex-col gap-3 mb-4">
-              <a href="https://www.facebook.com/YOUR_PAGE" target="_blank" rel="noopener noreferrer"
-                className="w-full bg-[#1877F2] text-white py-4 rounded-full font-black text-center hover:opacity-90 transition-opacity block">
+              <a href="https://www.facebook.com/share/1B8NFWF5Nt/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="w-full bg-[#1877F2] text-white py-4 rounded-full font-black text-center hover:opacity-90 transition-opacity block">
                 📘 Message us on Facebook
+              </a>
+              <a href="https://wa.me/17025461964" target="_blank" rel="noopener noreferrer" className="w-full bg-[#25D366] text-white py-4 rounded-full font-black text-center hover:opacity-90 transition-opacity block">
+                💬 WhatsApp Us
               </a>
             </div>
 
@@ -483,13 +481,11 @@ export default function PuppyPage() {
           <p className="text-xs text-[#a07850] font-bold">{puppy.name}</p>
           <p className="text-lg font-black text-[#5c3d1e]">${puppy.price.toLocaleString()}</p>
         </div>
-        <a
-          href="https://www.facebook.com/YOUR_PAGE"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex-1 bg-[#1877F2] text-white py-3 rounded-full font-black text-center text-sm"
-        >
-          📘 Message on Facebook
+        <a href="https://www.facebook.com/share/1B8NFWF5Nt/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="w-full bg-[#1877F2] text-white py-4 rounded-full font-black text-center hover:opacity-90 transition-opacity block">
+          📘 Message us on Facebook
+        </a>
+        <a href="https://wa.me/17025461964" target="_blank" rel="noopener noreferrer" className="w-full bg-[#25D366] text-white py-4 rounded-full font-black text-center hover:opacity-90 transition-opacity block">
+          💬 WhatsApp Us
         </a>
       </div>
 

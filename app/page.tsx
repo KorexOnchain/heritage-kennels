@@ -87,9 +87,9 @@ export default function Home() {
             <Link href="/puppies" className="bg-[#5c3d1e] text-white px-8 py-3 rounded-full text-base md:text-lg font-bold hover:bg-[#a07850] transition-colors text-center">
               Browse Available Puppies
             </Link>
-            <Link href="/contact" className="border-2 border-white text-white px-8 py-3 rounded-full text-base md:text-lg font-bold hover:bg-white hover:text-[#5c3d1e] transition-colors text-center">
-              Contact Us
-            </Link>
+            <a href="https://wa.me/17025461964" target="_blank" rel="noopener noreferrer" className="border-2 border-white text-white px-8 py-3 rounded-full text-lg font-bold hover:bg-white hover:text-[#5c3d1e] transition-colors">
+              💬 WhatsApp Us
+            </a>
           </div>
         </div>
       </section>

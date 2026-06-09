@@ -7,7 +7,7 @@ export default function ContactPage() {
   const router = useRouter()
 
   useEffect(() => {
-    window.location.href = 'https://www.facebook.com/YOUR_PAGE'
+    window.location.href = 'https://www.facebook.com/share/1B8NFWF5Nt/?mibextid=wwXIfr'
   }, [])
 
   return (
